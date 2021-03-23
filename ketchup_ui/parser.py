@@ -1,15 +1,14 @@
 class Parser:
     def __init__(self):
-        pass
+        self.alert_list = ["hey ketchup", "he catch up", "hey catch up", "he ketchup",
+                           "hey petal", "haircut up", "hey get up", "he kept up"]
 
     # Format TBD
     def parse(self, inp: str):
+        if inp in self.alert_list:
+            return "attend", ""
         inp = inp.split()
-        if len(inp) == 0:
-            return "", ""
-        elif len(inp) == 1:
+        if len(inp) == 1:
             return inp[0], ""
         else:
-            command = inp[0]
-            argument = ' '.join(inp[1:])
-            return command, argument
+            return inp[0], inp[1:]

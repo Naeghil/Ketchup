@@ -9,18 +9,17 @@ class OrchestratorComponents:
         self._msg_queue = Queue()
         # Components
         self.listener = Listener(self._msg_queue)
-        self.speaker = Speaker()
+        self._speaker = Speaker()
         self.motivator = Motivator()
         self.current_pomodoro = None
         # Flags
-        self.receptive = False
         self.is_running = True
 
     def say(self, msg):
         if not isinstance(msg, list):
             msg = [msg]
         for m in msg:
-            self.speaker.say(m)
+            self._speaker.say(m)
 
     def get_operation(self):
         return self._msg_queue.get(block=True)
@@ -34,4 +33,3 @@ class OrchestratorComponents:
             print("Sender: "+sender)
             print("Message: "+inp)
         self.listener.do_kill()
-

@@ -20,7 +20,6 @@ class Listener(Thread):
                 audio = self.rec.listen(mic, phrase_time_limit=2)
                 # Possibility to run "show_all=True" for possible alternatives
                 t_audio = self.rec.recognize_google(audio, language='en')
-                print(t_audio)
             except sr.UnknownValueError as ex:
                 t_audio = ""  # This is noise
             except sr.RequestError:
