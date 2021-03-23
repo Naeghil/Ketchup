@@ -71,7 +71,7 @@ class Pomodoro(Thread):
     def advance_progress(self):
         old = self.current_state()
         self.progress += 1
-        self.message_queue.put((old, self.current_state(), self.time_left()))
+        self.message_queue.put(("pomodoro", (old, self.current_state(), self.time_left())))
 
     # Management methods
     def pause(self):

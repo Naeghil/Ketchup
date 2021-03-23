@@ -1,48 +1,27 @@
-from ketchup_ui.user_in import Listener
-from ketchup_ui.user_out import Speaker
 from ketchup_ui.parser import Parser
 from ketchup_core.pomodoro import Pomodoro
-from ketchup_core.motivator import Motivator
-import queue
+
+from ketchup_core._orchestrator_functions import OrchestratorFunctions
 
 
 # An orchestrator is a component (e.g. context)
 # with the purpose (responsibility) of creating and storing
 # other components and mediating the interaction among them
-class KetchupOrchestrator:
+class KetchupOrchestrator(OrchestratorFunctions):
     def __init__(self):
-        self.current_pomodoro = None
-        self.speaker = Speaker()
-        self.listener = Listener()
-        self.motivator = Motivator()
-        self.receptive = False
-        self.is_running = True
-        self.commands = {
-            "exit": self.stop_run,
-            "repeat": self.repeat,
-            "nothing": self.nothing,
-            "start": self.start_pomodoro,
-            "pause": self.pause_pomodoro,
-            "resume": self.resume_pomodoro,
-            "stop": self.stop_pomodoro,
-            "update": self.give_update,
-            "help": self.give_help,
-            "motivate": self.motivate
-        }
+        super(KetchupOrchestrator, self).__init__()
         self.alert_list = ["hey ketchup", "he catch up", "hey catch up", "he ketchup",
                            "hey petal", "haircut up", "hey get up", "he kept up"]
 
-        self.message_queue = queue.Queue()
+
 
     # The following method runs the main loop of the app
     # Its name is important because it is related to the idea of
     # a Thread/Process object. If the orchestrator becomes
     # a subclass of these classes, the run method is usually central
-    def stop_run(self, args):
-        self.is_running = False
 
-    def repeat(self, args):
-        self.speaker.say(args)
+
+
 
     def no_command(self, command):
         if command != "":
@@ -98,17 +77,7 @@ class KetchupOrchestrator:
         message += "You " + adv + "have " + str(p_left) + " pomodoros left out of " + str(p_total) + motiv
         self.speaker.say(message)
 
-    def give_help(self, args):
-        msg = "I am Ketchup, your pomodoro assistant, I'm here to make your days more productive!"
-        msg += "To tell me something, first attract my attention by saying hey ketchup. I won't listen otherwise."
-        msg += "Once you have my attention, you can start a pomodoro session by telling me to start"
-        msg += "By default a session consists of four productive intervals, the pomodoros, each lasting 25 minutes." \
-               "Between each interval, you will take a short break of 5 minutes."\
-               "After each third pomodoro, you'll have a long 30 minutes break."
-        msg += "You can pause or resume the session anytime. Also, you can ask for an update on what is going on."
-        msg += "You can exit the application by saying exit"
 
-        self.speaker.say(msg)
 
     def notify(self):
         if self.message_queue.empty():
@@ -148,3 +117,4 @@ class KetchupOrchestrator:
 
         if self.current_pomodoro:
             self.current_pomodoro.do_kill()
+        self.listener.do_kill()
